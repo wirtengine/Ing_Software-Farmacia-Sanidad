@@ -1,0 +1,31 @@
+# Ignorar archivos de configuración con secretos
+**/application.properties
+**/application-*.properties
+!**/application-example.properties
+
+# Directorios de compilación
+build/
+out/
+.gradle/
+
+# Archivos de IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# Logs
+logs/
+*.log
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de Spring Boot
+spring-boot-devtools.properties
+
+# Ignorar migraciones de Flyway (no subir al repo)
+src/main/resources/db/migration/
