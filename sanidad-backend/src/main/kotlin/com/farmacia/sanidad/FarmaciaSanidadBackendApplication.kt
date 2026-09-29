@@ -1,14 +1,13 @@
-// src/main/kotlin/com/farmacia/sanidad/FarmaciaSanidadApplication.kt
 package com.farmacia.sanidad
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
+import org.springframework.scheduling.annotation.EnableScheduling
 
 @SpringBootApplication
-@EnableMethodSecurity
-class FarmaciaSanidadApplication
+@EnableScheduling
+class FarmaciaSanidadBackendApplication
 
 fun main(args: Array<String>) {
-    runApplication<FarmaciaSanidadApplication>(*args)
+    runApplication<FarmaciaSanidadBackendApplication>(*args)
 }

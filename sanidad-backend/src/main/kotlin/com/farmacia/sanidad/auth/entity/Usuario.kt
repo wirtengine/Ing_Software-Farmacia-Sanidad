@@ -1,41 +1,58 @@
 package com.farmacia.sanidad.auth.entity
 
 import jakarta.persistence.*
-import org.hibernate.annotations.JdbcType
-import org.hibernate.dialect.PostgreSQLEnumJdbcType
-import java.time.OffsetDateTime
+import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.UpdateTimestamp
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
+import java.time.LocalDateTime
 import java.util.UUID
+
+enum class RolUsuario { ADMIN, REGENTE, VENDEDOR }
 
 @Entity
 @Table(name = "usuarios", schema = "farmacia")
-class Usuario(
+class Usuario : UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    val id: UUID = UUID.randomUUID(),
+    @Column(name = "id", updatable = false, nullable = false)
+    var id: UUID? = null
 
-    @Column(name = "username", length = 80, nullable = false, unique = true)
-    var username: String,
+    // Se llama "nombreUsuario" (no "username") para no chocar con getUsername() de UserDetails.
+    @Column(name = "username", nullable = false, unique = true)
+    var nombreUsuario: String = ""
 
-    @Column(name = "nombre_completo", length = 160, nullable = false)
-    var nombreCompleto: String,
+    @Column(name = "nombre_completo", nullable = false)
+    var nombreCompleto: String = ""
 
     @Column(name = "password_hash", nullable = false)
-    var passwordHash: String,
+    var passwordHash: String = ""
 
     @Enumerated(EnumType.STRING)
-    @JdbcType(PostgreSQLEnumJdbcType::class)
     @Column(name = "rol", nullable = false)
-    var rol: RolUsuario,
+    var rol: RolUsuario = RolUsuario.VENDEDOR
 
     @Column(name = "activo", nullable = false)
-    var activo: Boolean = true,
+    var activo: Boolean = true
 
     @Column(name = "ultimo_acceso")
-    var ultimoAcceso: OffsetDateTime? = null,
+    var ultimoAcceso: LocalDateTime? = null
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    val createdAt: OffsetDateTime = OffsetDateTime.now(),
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    var createdAt: LocalDateTime? = null
 
-    @Column(name = "updated_at", nullable = false)
-    var updatedAt: OffsetDateTime = OffsetDateTime.now()
-)
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    var updatedAt: LocalDateTime? = null
+
+    override fun getAuthorities(): Collection<GrantedAuthority> = listOf(SimpleGrantedAuthority("ROLE_${rol.name}"))
+    override fun getPassword(): String = passwordHash
+    override fun getUsername(): String = nombreUsuario
+    override fun isAccountNonExpired(): Boolean = true
+    override fun isAccountNonLocked(): Boolean = true
+    override fun isCredentialsNonExpired(): Boolean = true
+    override fun isEnabled(): Boolean = activo
+}

@@ -1,1 +1,52 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { @apply antialiased; }
+
+  body {
+    @apply text-ink font-sans;
+    background-color: #FBF8F3;
+    background-image:
+      radial-gradient(1200px 600px at -10% -10%, rgba(214, 245, 234, 0.7), transparent 60%),
+      radial-gradient(900px 500px at 110% 0%, rgba(234, 229, 249, 0.6), transparent 60%),
+      radial-gradient(800px 500px at 50% 120%, rgba(250, 228, 231, 0.55), transparent 60%);
+    background-attachment: fixed;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+
+  h1, h2, h3, h4 { @apply font-serif; }
+  ::selection { @apply bg-sage-200 text-sage-900; }
+
+  select { @apply outline-none focus:ring-2 focus:ring-sage-300; }
+  textarea { @apply outline-none focus:ring-2 focus:ring-sage-300; }
+}
+
+@layer components {
+  /* Patrón sutil de cruces de farmacia */
+  .patron-farmacia {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath fill='%235B9E74' fill-opacity='0.06' d='M20 14h8v6h6v8h-6v6h-8v-6h-6v-8h6z'/%3E%3C/svg%3E");
+  }
+  .tarjeta-vidrio {
+    @apply bg-white/80 backdrop-blur-md border border-white/70 shadow-card;
+  }
+  .campo-select {
+    @apply w-full h-11 px-4 rounded-xl bg-surface border border-border-soft text-sm text-ink;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { @apply bg-border-strong rounded-full; }
+  .scrollbar-thin::-webkit-scrollbar-track { @apply bg-transparent; }
+}
+
+@media print {
+  aside, header, button { display: none !important; }
+  body { background: white !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
